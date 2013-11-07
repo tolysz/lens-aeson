@@ -257,7 +257,7 @@ key :: AsValue t => Text -> Traversal' t Value
 key i = _Object . ix i
 
 members :: AsValue t => IndexedTraversal' Text t Value
-members = _Object . each
+members = _Object . itraversed
 
 -- | Like 'ix', but for Arrays with Int indexes
 --
@@ -292,10 +292,10 @@ instance AsJSON String where
 type instance Index Value = Text
 type instance IxValue Value = Value
 
-instance Applicative f => Ixed f Value where
+instance Ixed Value where
   ix i = _Object.ix i
 
-instance (Applicative f, Gettable f) => Contains f Value where
+instance Contains Value where
   contains i f (Object o) = coerce (contains i f o)
   contains i f _ = coerce (indexed f i False)
 
